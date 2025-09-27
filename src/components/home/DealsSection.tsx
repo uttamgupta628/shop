@@ -5,7 +5,7 @@ import type { Product } from '../types/product';
 import watch1 from '../../assets/watch1.png';
 import tshirt from '../../assets/thsirt.png';
 import mouse from '../../assets/mouse.png';
-import headPhone from '../../assets/headphone.png';
+import headPhone from '../../assets/headPhone.png';
 
 const FlashSales: React.FC = () => {
   const navigate = useNavigate();
