@@ -5,7 +5,7 @@ import type { Product } from '../types/product';
 import watch1 from '../../assets/watch1.png';
 import tshirt from '../../assets/thsirt.png';
 import mouse from '../../assets/mouse.png';
-import headphone from '../../assets/headphone.png';
+import headPhone from '../../assets/headphone.png';
 
 const FlashSales: React.FC = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const FlashSales: React.FC = () => {
       brand: 'HAVIT',
       price: 120,
       originalPrice: 160,
-      image: headphone,
+      image: headPhone,
       rating: 4.5,
       reviewCount: '88',
       status: '-40%',
