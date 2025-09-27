@@ -5,7 +5,7 @@ import type { Product } from "../types/product";
 import tshit from "../../assets/thsirt.png";
 import watch1 from "../../assets/watch1.png";
 import mouse from "../../assets/mouse.png";
-import headphone from "../../assets/headphone.png";
+import headPhone from "../../assets/headPhone.png";
 import game from "../../assets/game.png";
 import shoe from "../../assets/shoe.png";
 
@@ -21,7 +21,7 @@ const ExploreProducts: React.FC = () => {
       brand: "HAVIT",
       price: 120,
       originalPrice: 160,
-      image: headphone,
+      image: headPhone,
       rating: 4.5,
       reviewCount: "88",
       status: "-40%",
