@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Heart, ShoppingCart, User, Home, Star, Truck, RotateCcw, Plus, Minus } from 'lucide-react';
+import { Heart, Star, Truck, RotateCcw, Plus, Minus } from 'lucide-react';
 import shoe from '../assets/shoe.png';
 import shoe1 from '../assets/shoe1.png';
 import shoe2 from '../assets/shoe2.png';
@@ -9,7 +9,6 @@ import tsirt from '../assets/thsirt.png';
 import headphone from '../assets/headphone.png';
 import watch1 from '../assets/watch1.png';
 import mouse from '../assets/mouse.png';
-import game from '../assets/game.png';
 
 const productData = {
   id: '1',
