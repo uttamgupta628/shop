@@ -6,7 +6,7 @@ import shoe2 from '../assets/shoe2.png';
 import shoe3 from '../assets/shoe3.png';    
 import shoe4 from '../assets/shoe4.png';
 import tsirt from '../assets/thsirt.png';
-import headphone from '../assets/headphone.png';
+import headPhone from '../assets/headPhone.png';
 import watch1 from '../assets/watch1.png';
 import mouse from '../assets/mouse.png';
 
@@ -39,7 +39,7 @@ const relatedProducts = [
     title: 'HAVIT HV-G92 Gamepad',
     price: 120,
     originalPrice: 160,
-    image: headphone,
+    image: headPhone,
     rating: 4.5,
     reviewCount: '88',
     status: '-40%'
