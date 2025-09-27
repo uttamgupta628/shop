@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import headPhone from '../../assets/headphone.png';
+import headPhone from '../../assets/headPhone.png';
 
 const MusicExperienceShowcase: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
