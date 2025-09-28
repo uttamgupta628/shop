@@ -39,7 +39,7 @@ const Checkout: React.FC = () => {
   };
 
   const subtotal = getTotalPrice();
-  const shipping = 0; // Free shipping
+//   const shipping = 0; 
   const total = subtotal;
 
   return (
