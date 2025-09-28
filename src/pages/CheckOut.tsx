@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Home, Heart, ShoppingCart, User, ArrowLeft } from 'lucide-react';
+import {  ArrowLeft } from 'lucide-react';
 import { useCart } from '../components/products/CartContext';
 import { useNavigate } from 'react-router-dom';
 
