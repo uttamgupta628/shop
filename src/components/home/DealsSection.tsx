@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Heart, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useWishlist } from '../products/WishlistContext';
+import { useCart } from '../products/CartContext';
 import type { Product } from '../types/product';
 import watch1 from '../../assets/watch1.png';
 import tshirt from '../../assets/thsirt.png';
@@ -9,6 +11,8 @@ import headPhone from '../../assets/headPhone.png';
 
 const FlashSales: React.FC = () => {
   const navigate = useNavigate();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { addToCart } = useCart();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState({
     days: 3,
@@ -73,16 +77,28 @@ const FlashSales: React.FC = () => {
     }
   ];
 
-  // Navigation handler
   const handleProductClick = (productId: string, event: React.MouseEvent) => {
-    // Prevent navigation when clicking on action buttons
     if ((event.target as HTMLElement).closest('button')) {
       return;
     }
     navigate(`/product/${productId}`);
   };
 
-  // Countdown timer effect
+  const handleWishlistClick = (product: Product, event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
+
+  const handleAddToCart = (product: Product, event: React.MouseEvent) => {
+    event.stopPropagation();
+    addToCart(product);
+  };
+
+  // Timer and other functions remain the same
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(prevTime => {
@@ -143,11 +159,9 @@ const FlashSales: React.FC = () => {
   return (
     <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        
         {/* Header Section */}
         <div className="flex items-center justify-between mb-12">
           <div className="flex items-center gap-8">
-            {/* Today's Flash Sales */}
             <div className="flex items-center gap-4">
               <div className="w-1 h-12 bg-orange-500 rounded-full"></div>
               <div>
@@ -180,18 +194,11 @@ const FlashSales: React.FC = () => {
             </div>
           </div>
 
-          {/* Navigation Arrows */}
           <div className="flex gap-2">
-            <button
-              onClick={prevSlide}
-              className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
-            >
+            <button onClick={prevSlide} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
               <ChevronLeft className="w-5 h-5 text-gray-600" />
             </button>
-            <button
-              onClick={nextSlide}
-              className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
-            >
+            <button onClick={nextSlide} className="p-2 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors">
               <ChevronRight className="w-5 h-5 text-gray-600" />
             </button>
           </div>
@@ -205,7 +212,6 @@ const FlashSales: React.FC = () => {
               className="bg-gray-50 rounded-lg p-4 group hover:shadow-lg transition-shadow cursor-pointer"
               onClick={(e) => handleProductClick(product.id, e)}
             >
-              {/* Product Image */}
               <div className="relative mb-4">
                 <img
                   src={product.image}
@@ -213,18 +219,18 @@ const FlashSales: React.FC = () => {
                   className="w-40 h-40 object-cover mx-auto"
                 />
                 
-                {/* Discount Badge */}
                 <div className="absolute top-3 left-3 bg-orange-500 text-white text-xs px-2 py-1 rounded">
                   {product.status}
                 </div>
 
-                {/* Action Buttons */}
                 <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button 
-                    className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50"
-                    onClick={(e) => e.stopPropagation()}
+                    className={`p-2 rounded-full shadow-md transition-colors ${
+                      isInWishlist(product.id) ? 'bg-red-500 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'
+                    }`}
+                    onClick={(e) => handleWishlistClick(product, e)}
                   >
-                    <Heart className="w-4 h-4 text-gray-600" />
+                    <Heart className={`w-4 h-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
                   </button>
                   <button 
                     className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50"
@@ -234,34 +240,26 @@ const FlashSales: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Add to Cart Button (appears on hover) */}
                 <div className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button 
                     className="w-full bg-black text-white py-2 rounded-b-lg hover:bg-gray-800 transition-colors"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => handleAddToCart(product, e)}
                   >
                     Add To Cart
                   </button>
                 </div>
               </div>
 
-              {/* Product Info */}
               <div className="space-y-2">
                 <h3 className="font-semibold text-gray-900 truncate">{product.title}</h3>
-                
-                {/* Price */}
                 <div className="flex items-center gap-2">
                   <span className="text-orange-500 font-bold">${product.price}</span>
                   {product.originalPrice && (
                     <span className="text-gray-400 line-through text-sm">${product.originalPrice}</span>
                   )}
                 </div>
-
-                {/* Rating */}
                 <div className="flex items-center gap-2">
-                  <div className="flex">
-                    {renderStars(product.rating)}
-                  </div>
+                  <div className="flex">{renderStars(product.rating)}</div>
                   <span className="text-gray-500 text-sm">({product.reviewCount})</span>
                 </div>
               </div>
@@ -269,7 +267,6 @@ const FlashSales: React.FC = () => {
           ))}
         </div>
 
-        {/* View All Products Button */}
         <div className="text-center">
           <button className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-12 py-4 rounded-lg transition-colors">
             View All Products

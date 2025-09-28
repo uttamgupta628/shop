@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Heart, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useWishlist } from "../products/WishlistContext";
+import { useCart } from "../products/CartContext"; 
 import type { Product } from "../types/product";
 import tshit from "../../assets/thsirt.png";
 import watch1 from "../../assets/watch1.png";
@@ -11,6 +13,8 @@ import shoe from "../../assets/shoe.png";
 
 const ExploreProducts: React.FC = () => {
   const navigate = useNavigate();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { addToCart } = useCart(); // Add cart hook
   const [currentPage, setCurrentPage] = useState(0);
 
   // Sample products data
@@ -122,6 +126,25 @@ const ExploreProducts: React.FC = () => {
     navigate(`/product/${productId}`);
   };
 
+  // Wishlist handler
+  const handleWishlistClick = (product: Product, event: React.MouseEvent) => {
+    event.stopPropagation();
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
+
+  // Cart handler - NEW
+  const handleAddToCart = (product: Product, event: React.MouseEvent) => {
+    event.stopPropagation();
+    addToCart(product);
+    
+    // Optional: Show success message or toast notification
+    // You could add a toast notification here if desired
+  };
+
   const productsPerPage = 8;
   const totalPages = Math.ceil(products.length / productsPerPage);
 
@@ -225,11 +248,16 @@ const ExploreProducts: React.FC = () => {
 
                 {/* Action Buttons */}
                 <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {/* Wishlist Button */}
                   <button
-                    className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50"
-                    onClick={(e) => e.stopPropagation()}
+                    className={`p-2 rounded-full shadow-md transition-colors ${
+                      isInWishlist(product.id) 
+                        ? 'bg-red-500 text-white' 
+                        : 'bg-white text-gray-600 hover:bg-gray-50'
+                    }`}
+                    onClick={(e) => handleWishlistClick(product, e)}
                   >
-                    <Heart className="w-4 h-4 text-gray-600" />
+                    <Heart className={`w-4 h-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
                   </button>
                   <button
                     className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50"
@@ -239,11 +267,11 @@ const ExploreProducts: React.FC = () => {
                   </button>
                 </div>
 
-                {/* Add to Cart Button - shows for all products on hover */}
+                {/* Add to Cart Button - NOW FUNCTIONAL */}
                 <div className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     className="w-full bg-black text-white py-2 rounded-b-lg hover:bg-gray-800 transition-colors"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => handleAddToCart(product, e)}
                   >
                     Add To Cart
                   </button>
