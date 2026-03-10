@@ -89,7 +89,7 @@ const ExploreProducts: React.FC = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap');
 
-        .ep-section { font-family:'Outfit',sans-serif; background:#fff; position:relative; }
+        .ep-section { font-family:'Plus Jakarta Sans', sans-serif; background:#fff; position:relative; }
 
         /* Entrance */
         .ep-fade { opacity:0; transform:translateY(28px); transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1); }
@@ -101,7 +101,7 @@ const ExploreProducts: React.FC = () => {
         .ep-bar { width:4px; height:18px; border-radius:2px; background:#ea641e; flex-shrink:0; animation:bar-blink 2s ease-in-out infinite; }
         @keyframes bar-blink { 0%,100%{opacity:1;} 50%{opacity:.4;} }
 
-        .ep-heading { font-family:'Syne',sans-serif; font-size:clamp(1.4rem,3vw,2.3rem); font-weight:800; color:#111; letter-spacing:-.03em; }
+        .ep-heading { font-family:'Plus Jakarta Sans', sans-serif; font-size:clamp(1.4rem,3vw,2.3rem); font-weight:800; color:#111; letter-spacing:-.03em; }
 
         /* ── Header row ── */
         .ep-header {

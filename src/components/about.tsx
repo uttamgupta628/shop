@@ -59,8 +59,8 @@ export default function AboutPage() {
     <div className="bg-white overflow-x-hidden">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap');
-        .about-page { font-family: 'Outfit', sans-serif; }
-        .font-display { font-family: 'Syne', sans-serif; }
+        .about-page { font-family:'Plus Jakarta Sans', sans-serif;}
+        .font-display { font-family:'Plus Jakarta Sans', sans-serif; }
 
         /* Entrance helpers */
         .fade-up   { opacity:0; transform:translateY(32px); transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1); }

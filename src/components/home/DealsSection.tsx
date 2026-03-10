@@ -91,7 +91,7 @@ const FlashSales: React.FC = () => {
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap');
 
         .fs-section {
-          font-family: 'Outfit', sans-serif;
+          font-family:'Plus Jakarta Sans', sans-serif;
           background: #fff;
           position: relative;
           overflow: hidden;

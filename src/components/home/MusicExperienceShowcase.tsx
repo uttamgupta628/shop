@@ -44,7 +44,7 @@ const SuitShowcase: React.FC = () => {
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600&display=swap');
 
         .suit-section {
-          font-family: 'Outfit', sans-serif;
+          font-family: 'Plus Jakarta Sans', sans-serif;
           background: #fff7f3;
           position: relative;
           overflow: hidden;
@@ -119,7 +119,7 @@ const SuitShowcase: React.FC = () => {
 
         /* ── Heading ── */
         .s-heading {
-          font-family:'Syne',sans-serif;
+          font-family:'Plus Jakarta Sans', sans-serif;
           font-size:clamp(2rem,5vw,4rem);
           font-weight:800; color:#111; line-height:1.05; letter-spacing:-.03em;
         }
