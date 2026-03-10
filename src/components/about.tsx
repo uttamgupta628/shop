@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Award, Heart, ShieldCheck, Truck, Users, Star, MapPin, Mail, Phone } from "lucide-react";
 
 /* ─── Intersection Observer hook ─── */
