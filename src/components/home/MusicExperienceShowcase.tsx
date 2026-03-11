@@ -368,19 +368,6 @@ const SuitShowcase: React.FC = () => {
                   <div className="s-cta-arrow" />
                 </button>
               </div>
-
-              <div className={`s-fade-up sd6 ${visible ? 'in' : ''} s-offer-strip`}>
-                {[
-                  { icon: '✦', text: 'Free Alterations' },
-                  { icon: '◈', text: 'Express Delivery' },
-                  { icon: '◇', text: 'Returns 30d' },
-                ].map(item => (
-                  <div key={item.text} className="s-offer-item">
-                    <div className="s-offer-icon">{item.icon}</div>
-                    <span>{item.text}</span>
-                  </div>
-                ))}
-              </div>
             </div>
 
             {/* ── Right ── */}

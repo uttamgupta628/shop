@@ -1,12 +1,100 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowUpRight } from 'lucide-react';
-import watch from '../../assets/dress.png';
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const HeroSection: React.FC = () => {
-  const [visible, setVisible]   = useState(false);
+// Using placeholder fashion images from unsplash (CDN safe)
+const slides = [
+  {
+    id: 1,
+    tag: "New Arrivals — Summer '25",
+    heading: ["Discover the", "Latest", "Fashion for", "Everyone"],
+    accentIdx: 1,
+    orangeIdx: 3,
+    body: "Mall Ka Baap brings you stylish, high-quality garments at unbeatable prices — for men, women & kids.",
+    img: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1600&q=80",
+    badge: "50% OFF",
+    price: "₹499",
+    tag2: "Free delivery",
+    bg: "#f8f4ef",
+    accent: "#ea641e",
+  },
+  {
+    id: 2,
+    tag: "Men's Exclusive — New In",
+    heading: ["Style That", "Defines", "The Modern", "Man"],
+    accentIdx: 1,
+    orangeIdx: 3,
+    body: "Premium menswear crafted for the bold — from sharp formals to relaxed casuals. Find your fit today.",
+    img: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=1600&q=80",
+    badge: "40% OFF",
+    price: "₹799",
+    tag2: "Ships in 24h",
+    bg: "#f0f4f8",
+    accent: "#1e6aea",
+  },
+  {
+    id: 3,
+    tag: "Women's Collection — Trending",
+    heading: ["Elegance", "Redefined", "For Every", "Woman"],
+    accentIdx: 1,
+    orangeIdx: 3,
+    body: "From ethnic elegance to western chic — discover our women's collection crafted for every occasion.",
+    img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1600&q=80",
+    badge: "60% OFF",
+    price: "₹599",
+    tag2: "Free delivery",
+    bg: "#f8f0f4",
+    accent: "#ea1e6a",
+  },
+];
+
+const categories = [
+  {
+    label: "Men's Wear",
+    img: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=600&q=80",
+    items: ["Shirts", "Trousers", "Suits", "Jackets"],
+    color: "#1e6aea",
+  },
+  {
+    label: "Women's Collection",
+    img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600&q=80",
+    items: ["Dresses", "Sarees", "Kurtas", "Tops"],
+    color: "#ea1e6a",
+  },
+  {
+    label: "Boys Fashion",
+    img: "https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=600&q=80",
+    items: ["T-Shirts", "Jeans", "Shorts", "Uniforms"],
+    color: "#1eea6a",
+  },
+  {
+    label: "Girls Fashion",
+    img: "https://images.unsplash.com/photo-1476234251651-f353703a034d?w=600&q=80",
+    items: ["Frocks", "Lehengas", "Tops", "Skirts"],
+    color: "#ea6a1e",
+  },
+  {
+    label: "Ethnic Wear",
+    img: "https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=600&q=80",
+    items: ["Kurtas", "Sherwanis", "Sarees", "Lehengas"],
+    color: "#6a1eea",
+  },
+  {
+    label: "Western Styles",
+    img: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80",
+    items: ["Jeans", "Blazers", "Denim", "Casual"],
+    color: "#1eeaea",
+  },
+];
+
+export default function HeroSection() {
+  const [visible, setVisible] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [animating, setAnimating] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isMobile, setIsMobile] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [hoveredCat, setHoveredCat] = useState(null);
+  const sectionRef = useRef(null);
+  const autoRef = useRef(null);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
@@ -22,390 +110,277 @@ const HeroSection: React.FC = () => {
 
   useEffect(() => {
     if (isMobile) return;
-    const handleMouse = (e: MouseEvent) => {
+
+    const handleMouseMove = (e) => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       setMousePos({
-        x: ((e.clientX - rect.left) / rect.width  - 0.5) * 20,
-        y: ((e.clientY - rect.top)  / rect.height - 0.5) * 20,
+        x: ((e.clientX - rect.left) / rect.width - 0.5) * 20,
+        y: ((e.clientY - rect.top) / rect.height - 0.5) * 20
       });
     };
-    window.addEventListener('mousemove', handleMouse);
-    return () => window.removeEventListener('mousemove', handleMouse);
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [isMobile]);
 
-  const categories = ["Men's Wear", "Women's Collection", "Kids Fashion", "New Arrivals", "Ethnic Wear", "Western Styles", "Accessories", "Sale Picks"];
+  const goTo = (idx) => {
+    if (animating) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setCurrent(idx);
+      setAnimating(false);
+    }, 400);
+  };
+
+  const prev = () => goTo((current - 1 + slides.length) % slides.length);
+  const next = () => goTo((current + 1) % slides.length);
+
+  useEffect(() => {
+    autoRef.current = setInterval(next, 4500);
+    return () => clearInterval(autoRef.current);
+  }, [current]);
+
+  const slide = slides[current];
 
   return (
-    <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    <div className="font-['Plus_Jakarta_Sans']">
 
-        /* ── Base: single clean font throughout ── */
-        .hero-wrap {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          background: #f8f4ef;
-          position: relative;
-          overflow: hidden;
-          min-height: 100svh;
-          display: flex;
-          align-items: center;
-        }
-        .hero-wrap::before {
-          content: '';
-          position: absolute; top: -30%; right: -10%;
-          width: 700px; height: 700px;
-          background: radial-gradient(circle at 60% 40%, rgba(234,100,30,.12) 0%, transparent 65%);
-          pointer-events: none;
-        }
-        .hero-wrap::after {
-          content: '';
-          position: absolute; bottom: -20%; left: -5%;
-          width: 500px; height: 500px;
-          background: radial-gradient(circle, rgba(234,100,30,.07) 0%, transparent 70%);
-          pointer-events: none;
-        }
-        .grid-bg {
-          position: absolute; inset: 0;
-          background-image:
-            linear-gradient(rgba(0,0,0,.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0,0,0,.03) 1px, transparent 1px);
-          background-size: 60px 60px;
-          mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
-          pointer-events: none;
-        }
 
-        /* ── Entrance ── */
-        .slide-up    { opacity:0; transform:translateY(40px);  transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1); }
-        .slide-right { opacity:0; transform:translateX(-30px); transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1); }
-        .slide-left  { opacity:0; transform:translateX(40px);  transition:opacity  1s cubic-bezier(.16,1,.3,1),transform  1s cubic-bezier(.16,1,.3,1); }
-        .slide-up.in,.slide-right.in,.slide-left.in { opacity:1; transform:none; }
-        .d1{transition-delay:.05s} .d2{transition-delay:.2s}  .d3{transition-delay:.35s}
-        .d4{transition-delay:.5s}  .d5{transition-delay:.65s}
+      {/* Hero Section */}
+      <div
+        className="relative overflow-hidden min-h-screen flex items-center bg-cover bg-center transition-all duration-700"
+        style={{
+          backgroundImage: `url(${slide.img})`
+        }}
+      >
 
-        /* ── Layout ── */
-        .hero-inner {
-          max-width: 1280px; margin: 0 auto;
-          padding: 80px clamp(16px,4vw,48px) 96px;
-          width: 100%; position: relative; z-index: 2;
-        }
-        .hero-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: clamp(32px,5vw,60px);
-          align-items: center;
-        }
-        .hero-left { display:flex; flex-direction:column; gap:clamp(20px,2.5vw,28px); }
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-black/40" />
 
-        /* ── Tag pill ── */
-        .tag-pill {
-          display:inline-flex; align-items:center; gap:8px;
-          background:#fff; border:1px solid rgba(0,0,0,.07); border-radius:100px;
-          padding:6px 14px 6px 8px;
-          font-size:12px; font-weight:600; color:#333; letter-spacing:.01em;
-          box-shadow:0 2px 8px rgba(0,0,0,.06); width:fit-content;
-        }
-        .tag-dot {
-          width:8px; height:8px; border-radius:50%; background:#ea641e; flex-shrink:0;
-          animation:tag-pulse 2s ease-in-out infinite;
-        }
-        @keyframes tag-pulse {
-          0%,100%{box-shadow:0 0 0 0 rgba(234,100,30,.4);}
-          50%{box-shadow:0 0 0 6px rgba(234,100,30,0);}
-        }
+        {/* Gradient for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/70 to-transparent lg:w-1/2" />
 
-        /* ── Heading — same font, heavier weight ── */
-        .hero-heading {
-          font-family: 'Plus Jakarta Sans', sans-serif;
-          font-size: clamp(2rem, 5vw, 4rem);
-          font-weight: 800;
-          line-height: 1.1;
-          color: #111;
-          letter-spacing: -0.025em;
-        }
-        .accent-word {
-          position: relative; display: inline-block; color: #ea641e;
-        }
-        .accent-word::after {
-          content: ''; position: absolute; bottom: 2px; left: 0; right: 0;
-          height: 3px; background: #ea641e; border-radius: 2px;
-          transform: scaleX(0); transform-origin: left;
-          transition: transform .8s cubic-bezier(.16,1,.3,1) 1s;
-        }
-        .accent-word.in::after { transform: scaleX(1); }
+        {/* Main Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-        /* ── Body text ── */
-        .hero-body {
-          font-size: clamp(13px,1.4vw,15px);
-          color: #666;
-          line-height: 1.75;
-          font-weight: 400;
-        }
+            {/* LEFT CONTENT */}
+            <div className="space-y-8">
 
-        /* ── Stats ── */
-        .stats-row    { display:flex; gap:clamp(12px,2vw,24px); align-items:center; flex-wrap:wrap; }
-        .stat-num     { font-size:clamp(1.2rem,2.5vw,1.75rem); font-weight:700; color:#111; line-height:1; }
-        .stat-label   { font-size:10px; font-weight:500; color:#999; text-transform:uppercase; letter-spacing:.1em; margin-top:4px; }
-        .stat-divider { width:1px; height:28px; background:rgba(0,0,0,.12); }
-
-        /* ── Buttons ── */
-        .btn-row { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
-        .btn-primary {
-          display:inline-flex; align-items:center; gap:10px;
-          background:#111; color:#fff;
-          font-family:'Plus Jakarta Sans',sans-serif;
-          font-size:14px; font-weight:600; letter-spacing:.01em;
-          padding:14px 28px; border-radius:100px; border:none; cursor:pointer;
-          position:relative; overflow:hidden;
-          transition:transform .3s,box-shadow .3s; white-space:nowrap;
-        }
-        .btn-primary::before {
-          content:''; position:absolute; inset:0; background:#ea641e;
-          transform:translateY(101%); transition:transform .45s cubic-bezier(.16,1,.3,1);
-          border-radius:100px;
-        }
-        .btn-primary:hover::before { transform:translateY(0); }
-        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 28px rgba(234,100,30,.35); }
-        .btn-primary span,.btn-primary svg { position:relative; z-index:1; }
-
-        .btn-secondary {
-          display:inline-flex; align-items:center; gap:8px;
-          background:transparent; color:#555;
-          font-family:'Plus Jakarta Sans',sans-serif;
-          font-size:13px; font-weight:500;
-          border:none; cursor:pointer; transition:color .3s; white-space:nowrap; padding:0;
-        }
-        .btn-secondary:hover { color:#ea641e; }
-        .btn-arrow {
-          width:34px; height:34px; border-radius:50%; border:1.5px solid currentColor;
-          display:flex; align-items:center; justify-content:center; flex-shrink:0;
-          transition:background .3s,border-color .3s;
-        }
-        .btn-secondary:hover .btn-arrow { background:#ea641e; border-color:#ea641e; color:#fff; }
-
-        /* ── Image scene ── */
-        .image-scene {
-          position: relative;
-          display: flex; justify-content: center; align-items: center;
-          height: clamp(360px,52vw,560px);
-          overflow: hidden;
-          padding: 24px 48px;
-          box-sizing: border-box;
-        }
-        .blob {
-          position:absolute;
-          width:clamp(200px,34vw,420px); height:clamp(200px,34vw,420px);
-          border-radius:60% 40% 70% 30%/50% 60% 40% 50%;
-          background:linear-gradient(135deg,rgba(234,100,30,.12),rgba(234,100,30,.04));
-          animation:blob-morph 8s ease-in-out infinite; pointer-events:none;
-        }
-        @keyframes blob-morph {
-          0%,100%{border-radius:60% 40% 70% 30%/50% 60% 40% 50%;}
-          33%    {border-radius:30% 70% 40% 60%/60% 30% 70% 40%;}
-          66%    {border-radius:50% 50% 30% 70%/40% 70% 30% 60%;}
-        }
-        .product-img {
-          position:relative; z-index:2;
-          width:clamp(130px,22vw,340px); height:clamp(170px,28vw,440px);
-          object-fit:contain;
-          filter:drop-shadow(0 24px 40px rgba(0,0,0,.16));
-          animation:img-float 5s ease-in-out infinite;
-        }
-        @keyframes img-float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);} }
-
-        /* Float cards — single font, clean weights */
-        .float-card {
-          position:absolute; background:#fff; border-radius:12px;
-          padding:10px 13px; box-shadow:0 8px 24px rgba(0,0,0,.1); z-index:4;
-          font-family:'Plus Jakarta Sans',sans-serif;
-          max-width:calc(50% - 12px);
-        }
-        .card-stock { top:18px;    left:10px;  animation:card-float 4s ease-in-out infinite; }
-        .card-price { bottom:18px; right:10px; animation:card-float 4s ease-in-out infinite 2s; }
-        .card-sale  {
-          top:12px; right:10px;
-          background:#ea641e; color:#fff; border-radius:50%;
-          width:clamp(48px,5.5vw,64px); height:clamp(48px,5.5vw,64px);
-          display:flex; flex-direction:column; align-items:center; justify-content:center;
-          animation:card-float 3.5s ease-in-out infinite 1s;
-          max-width:none;
-        }
-        @keyframes card-float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
-
-        .orbit {
-          position:absolute; border-radius:50%; pointer-events:none;
-          border:1px dashed rgba(234,100,30,.2);
-          animation:orbit-spin 18s linear infinite;
-          width: clamp(220px,34vw,420px) !important;
-          height:clamp(220px,34vw,420px) !important;
-        }
-        .orbit-dot {
-          position:absolute; width:8px; height:8px; border-radius:50%;
-          background:#ea641e; top:-4px; left:50%; transform:translateX(-50%);
-        }
-        @keyframes orbit-spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
-
-        /* ── Marquee ── */
-        .marquee-wrap {
-          position:absolute; bottom:0; left:0; right:0; overflow:hidden;
-          border-top:1px solid rgba(0,0,0,.06); background:rgba(255,255,255,.5);
-          padding:10px 0; backdrop-filter:blur(4px);
-        }
-        .marquee-track { display:flex; gap:40px; width:max-content; animation:marquee 18s linear infinite; }
-        .marquee-item {
-          display:flex; align-items:center; gap:10px;
-          font-size:11px; font-weight:500; color:#888;
-          white-space:nowrap; letter-spacing:.06em; text-transform:uppercase;
-        }
-        .marquee-star { color:#ea641e; font-size:10px; }
-        @keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
-
-        /* ════════════════════════
-           RESPONSIVE
-        ════════════════════════ */
-        @media (max-width: 768px) {
-          .hero-inner { padding: 48px 20px 84px; }
-          .hero-grid  { grid-template-columns:1fr; gap:32px; }
-          .hero-right { order:-1; }
-          .image-scene { height:clamp(300px,56vw,400px); padding:18px 36px; }
-          .orbit { width:clamp(200px,44vw,320px) !important; height:clamp(200px,44vw,320px) !important; }
-        }
-        @media (max-width: 640px) {
-          .hero-inner { padding:36px 16px 76px; }
-          .hero-grid  { gap:28px; }
-          .image-scene { height:clamp(280px,60vw,360px); padding:14px 28px; }
-          .float-card  { padding:7px 10px; border-radius:10px; }
-          .btn-secondary span { display:none; }
-          .orbit { width:clamp(180px,50vw,280px) !important; height:clamp(180px,50vw,280px) !important; }
-        }
-        @media (max-width: 420px) {
-          .hero-inner  { padding:28px 14px 68px; }
-          .hero-grid   { gap:20px; }
-          .card-stock,.card-price { display:none; }
-          .card-sale   { width:44px !important; height:44px !important; top:8px; right:6px; }
-          .image-scene { height:clamp(240px,60vw,300px); padding:8px 18px; }
-          .orbit       { display:none; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .slide-up,.slide-right,.slide-left { transition:none; opacity:1; transform:none; }
-          .blob,.product-img,.card-stock,.card-price,.card-sale,.orbit,.tag-dot,.marquee-track { animation:none; }
-          .accent-word::after { transition:none; transform:scaleX(1); }
-        }
-      `}</style>
-
-      <section ref={sectionRef} className="hero-wrap">
-        <div className="grid-bg" />
-
-        <div className="hero-inner">
-          <div className="hero-grid">
-
-            {/* ── Left ── */}
-            <div className="hero-left">
-
-              <div className={`slide-right d1 ${visible ? 'in' : ''}`}>
-                <div className="tag-pill">
-                  <span className="tag-dot" />
-                  New Arrivals — Summer '25
-                </div>
-              </div>
-
-              <div className={`slide-right d2 ${visible ? 'in' : ''}`}>
-                <h1 className="hero-heading">
-                  Discover the{' '}
-                  <span className={`accent-word ${visible ? 'in' : ''}`}>Latest</span>
-                  <br />Fashion for<br />
-                  <span style={{ color: '#ea641e' }}>Everyone</span>
-                </h1>
-              </div>
-
-              <div className={`slide-right d3 ${visible ? 'in' : ''}`}>
-                <p className="hero-body">
-                  Mall Ka Baap brings you stylish, high-quality garments at unbeatable prices — for men, women &amp; kids. Explore exclusive collections curated just for you.
-                </p>
-              </div>
-
-              <div className={`slide-up d4 ${visible ? 'in' : ''}`}>
-                <div className="stats-row">
-                  <div><div className="stat-num">12K+</div><div className="stat-label">Styles</div></div>
-                  <div className="stat-divider" />
-                  <div><div className="stat-num">98%</div><div className="stat-label">Happy Buyers</div></div>
-                  <div className="stat-divider" />
-                  <div><div className="stat-num">50+</div><div className="stat-label">Brands</div></div>
-                </div>
-              </div>
-
-              <div className={`slide-up d5 ${visible ? 'in' : ''} btn-row`}>
-                <button className="btn-primary">
-                  <span>Shop Now</span>
-                  <ArrowUpRight size={16} />
-                </button>
-                <button className="btn-secondary">
-                  <div className="btn-arrow"><ArrowUpRight size={14} /></div>
-                  <span>View Lookbook</span>
-                </button>
-              </div>
-            </div>
-
-            {/* ── Right ── */}
-            <div className={`slide-left d3 ${visible ? 'in' : ''} hero-right`}>
-              <div className="image-scene">
-                <div className="orbit"><div className="orbit-dot" /></div>
-                <div className="blob" />
-
-                <img
-                  src={watch}
-                  alt="Latest Fashion"
-                  className="product-img"
-                  style={{
-                    transform: isMobile
-                      ? undefined
-                      : `perspective(800px) rotateY(${mousePos.x * 0.4}deg) rotateX(${-mousePos.y * 0.3}deg)`,
-                  }}
+              {/* Tag */}
+              <div className="inline-flex items-center gap-2 bg-white border rounded-full px-4 py-2 shadow">
+                <span
+                  className="w-2 h-2 rounded-full animate-pulse"
+                  style={{ backgroundColor: slide.accent }}
                 />
-
-                {/* In Stock */}
-                <div className="float-card card-stock">
-                  <div style={{ display:'flex', alignItems:'center', gap:7 }}>
-                    <div style={{ width:7,height:7,borderRadius:'50%',background:'#22c55e',boxShadow:'0 0 0 3px rgba(34,197,94,.2)',flexShrink:0 }} />
-                    <span style={{ fontSize:12,fontWeight:600,color:'#111' }}>In Stock</span>
-                  </div>
-                  <div style={{ fontSize:10,fontWeight:400,color:'#aaa',marginTop:2 }}>Ships in 24h</div>
-                </div>
-
-                {/* Price */}
-                <div className="float-card card-price">
-                  <div style={{ fontSize:10,fontWeight:500,color:'#999',textTransform:'uppercase',letterSpacing:'.1em' }}>Starting from</div>
-                  <div className="price-num" style={{ fontSize:20,fontWeight:700,color:'#111',lineHeight:1.2,marginTop:2 }}>₹499</div>
-                  <div style={{ fontSize:10,fontWeight:500,color:'#ea641e',marginTop:2 }}>Free delivery</div>
-                </div>
-
-                {/* Sale */}
-                <div className="float-card card-sale">
-                  <span style={{ fontSize:8,fontWeight:600,letterSpacing:'.1em' }}>UPTO</span>
-                  <span style={{ fontSize:18,fontWeight:800,lineHeight:1 }}>50%</span>
-                  <span style={{ fontSize:8,fontWeight:500,letterSpacing:'.08em' }}>OFF</span>
-                </div>
+                <span className="text-xs font-semibold">{slide.tag}</span>
               </div>
-            </div>
 
+              {/* Heading */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
+                {slide.heading.map((word, i) => (
+                  <span key={i}>
+                    {i === slide.accentIdx ? (
+                      <span style={{ color: slide.accent }}>{word}</span>
+                    ) : (
+                      word
+                    )}
+                    <br />
+                  </span>
+                ))}
+              </h1>
+
+              {/* Body */}
+              <p className="text-gray-700 max-w-md">{slide.body}</p>
+
+              {/* Button */}
+              <button className="inline-flex items-center gap-2 bg-black text-white px-8 py-3 rounded-full font-semibold hover:shadow-xl transition">
+                Shop Now
+              </button>
+
+            </div>
           </div>
         </div>
 
+        {/* SLIDER CONTROLS */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-10 flex items-center gap-5 z-20">
+
+          <button
+            onClick={prev}
+            className="w-10 h-10 rounded-full border bg-white flex items-center justify-center hover:bg-black hover:text-white transition"
+          >
+            <ChevronLeft size={18} />
+          </button>
+
+          <div className="flex gap-2">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                className={`h-2 rounded-full transition-all ${i === current ? "w-8" : "w-2 bg-gray-300"
+                  }`}
+                style={{ backgroundColor: i === current ? slide.accent : undefined }}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={next}
+            className="w-10 h-10 rounded-full border bg-white flex items-center justify-center hover:bg-black hover:text-white transition"
+          >
+            <ChevronRight size={18} />
+          </button>
+
+        </div>
+
+      </div>
+
+      {/* Category Section */}
+      <div className="relative z-20 bg-white border-t-2 border-b-2 border-gray-900">
+        <div className="flex h-[100px] sm:h-[140px] lg:h-[160px]">
+          {categories.map((cat, i) => (
+            <div
+              key={cat.label}
+              className="flex-1 relative overflow-hidden cursor-pointer border-r border-gray-900 last:border-r-0 transition-all duration-500 hover:flex-[2.2] group"
+              onMouseEnter={() => setHoveredCat(i)}
+              onMouseLeave={() => setHoveredCat(null)}
+            >
+              {/* Background Image */}
+              <div
+                className="absolute inset-0 bg-cover bg-center opacity-0 scale-105 transition-all duration-450 group-hover:opacity-100 group-hover:scale-100"
+                style={{ backgroundImage: `url(${cat.img})` }}
+              />
+
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-black/45 opacity-0 transition-opacity duration-400 group-hover:opacity-100" />
+
+              {/* Content */}
+              <div className="relative z-10 h-full flex flex-col items-center justify-center">
+                <div className="text-xs sm:text-sm lg:text-lg font-black tracking-wider uppercase text-gray-900 group-hover:text-white group-hover:tracking-widest transition-all duration-400 px-2 text-center">
+                  {cat.label}
+                </div>
+                <div className="text-[8px] sm:text-[10px] font-medium text-transparent group-hover:text-white/60 uppercase tracking-wider mt-1 transition-colors duration-400">
+                  {cat.items.length * 120}+ styles
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {/* Marquee */}
-        <div className="marquee-wrap">
-          <div className="marquee-track">
+        <div className="relative overflow-hidden border-t border-black/6 bg-white/50 py-2.5 backdrop-blur-sm">
+          <div className="flex gap-10 w-max animate-marquee">
             {[...Array(2)].map((_, i) =>
-              categories.map(item => (
-                <div key={`${i}-${item}`} className="marquee-item">
-                  <span className="marquee-star">✦</span>{item}
+              ["Men's Wear", "Women's Collection", "Kids Fashion", "New Arrivals", "Ethnic Wear", "Western Styles"].map(item => (
+                <div key={`${i}-${item}`} className="flex items-center gap-2.5 text-[11px] font-medium text-gray-500 whitespace-nowrap uppercase tracking-wider">
+                  <span className="text-[#ea641e] text-[10px]">✦</span>
+                  {item}
                 </div>
               ))
             )}
           </div>
         </div>
-      </section>
-    </>
-  );
-};
+      </div>
 
-export default HeroSection;
+      {/* Add custom animations to TailWind */}
+      <style jsx>{`
+        @keyframes pulse {
+          0%, 100% { box-shadow: 0 0 0 0 var(--accent-color); }
+          50% { box-shadow: 0 0 0 6px transparent; }
+        }
+        
+        @keyframes blob {
+          0%, 100% { border-radius: 60% 40% 70% 30% / 50% 60% 40% 50%; }
+          33% { border-radius: 30% 70% 40% 60% / 60% 30% 70% 40%; }
+          66% { border-radius: 50% 50% 30% 70% / 40% 70% 30% 60%; }
+        }
+        
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-14px); }
+        }
+        
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes float-medium {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        
+        .animate-pulse {
+          animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .animate-blob {
+          animation: blob 8s ease-in-out infinite;
+        }
+        
+        .animate-float {
+          animation: float 5s ease-in-out infinite;
+        }
+        
+        .animate-float-slow {
+          animation: float-slow 4s ease-in-out infinite;
+        }
+        
+        .animate-float-medium {
+          animation: float-medium 3.5s ease-in-out infinite;
+        }
+        
+        .animate-float-slower {
+          animation: float-slow 4s ease-in-out infinite 2s;
+        }
+        
+        .animate-spin-slow {
+          animation: spin-slow 18s linear infinite;
+        }
+        
+        .animate-marquee {
+          animation: marquee 18s linear infinite;
+        }
+        
+        .transition-duration-400 {
+          transition-duration: 400ms;
+        }
+        
+        .transition-duration-450 {
+          transition-duration: 450ms;
+        }
+        
+        .transition-duration-900 {
+          transition-duration: 900ms;
+        }
+        
+        .delay-400 {
+          transition-delay: 400ms;
+        }
+        
+        .delay-500 {
+          transition-delay: 500ms;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}

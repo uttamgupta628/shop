@@ -120,7 +120,7 @@ const FlashSales: React.FC = () => {
         @keyframes bar-pulse { 0%,100%{opacity:1;} 50%{opacity:.5;} }
 
         /* Heading */
-        .fs-heading { font-family:'Syne',sans-serif; font-size:clamp(1.5rem,3vw,2.4rem); font-weight:800; color:#111; letter-spacing:-.03em; line-height:1; }
+        .fs-heading { font-family:'Plus Jakarta Sans', sans-serif; font-size:clamp(1.5rem,3vw,2.4rem); font-weight:800; color:#111; letter-spacing:-.03em; line-height:1; }
 
         /* ── Header row layout ── */
         .fs-header {

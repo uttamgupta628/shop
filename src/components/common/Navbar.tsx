@@ -1,109 +1,168 @@
 import React, { useState } from "react";
-import { Search, Home, Heart, ShoppingCart, User } from "lucide-react";
+import {
+  Search,
+  ShoppingCart,
+  User,
+  Menu,
+  X,
+  Grid2x2
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useWishlist } from "../products/WishlistContext";
 import { useCart } from "../products/CartContext";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
-  const { wishlistCount } = useWishlist();
   const { getTotalItems } = useCart();
-  const [searchQuery, setSearchQuery] = useState<string>("");
-
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      console.log("Searching for:", searchQuery);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
+  const [mobileMenu, setMobileMenu] = useState(false);
 
   return (
-    <nav className="bg-white shadow-md border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <h1
-              className="text-2xl font-bold text-orange-500 cursor-pointer"
-              onClick={() => navigate("/")}
-            >
-              QuickShop
-            </h1>
-          </div>
+    <nav className="w-full bg-white/90 text-black relative">
+      <div className="max-w-7xl mx-auto px-6">
 
-          {/* Search Bar */}
-          <div className="flex-1 max-w-2xl mx-8">
-            <div className="relative flex items-center">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
-              </div>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Search Item"
-                className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-full bg-gray-50 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              />
+        <div className="flex items-center justify-between h-16">
+
+          {/* CATEGORIES */}
+          <div className="relative group">
+
+            <div className="flex items-center   hover:text-orange-500 gap-3 cursor-pointer">
+              <Grid2x2 className="w-5 h-5" />
+              <span className="text-sm font-semibold tracking-wide">
+                CATEGORIES
+              </span>
+            </div>
+
+            {/* Dropdown Card */}
+            <div className="absolute left-0 top-full w-72 bg-gray-100 text-black shadow-2xl 
+            p-8 space-y-8 opacity-0 invisible 
+            group-hover:opacity-100 group-hover:visible 
+            transition-all duration-300 z-50">
+
               <button
-                onClick={handleSearch}
-                className="absolute inset-y-0 right-0 flex items-center px-6 bg-black text-white rounded-full hover:bg-gray-800 transition-colors duration-200"
+                onClick={() => navigate("/tshirts")}
+                className="block font-semibold hover:text-orange-500" 
               >
-                Search
+                T-SHIRTS
               </button>
+
+              <button
+                onClick={() => navigate("/sweater")}
+                className="block font-semibold hover:text-orange-500"
+              >
+                SWEATER
+              </button>
+
+              <button
+                onClick={() => navigate("/suit")}
+                className="block font-semibold hover:text-orange-500"
+              >
+                SUIT
+              </button>
+
+              <button
+                onClick={() => navigate("/shirts")}
+                className="block font-semibold hover:text-orange-500"
+              >
+                SHIRTS
+              </button>
+
+              <button
+                onClick={() => navigate("/jeans")}
+                className="block font-semibold hover:text-orange-500"
+              >
+                JEANS
+              </button>
+
+              <button
+                onClick={() => navigate("/jackets")}
+                className="block font-semibold hover:text-orange-500"
+              >
+                JACKETS
+              </button>
+
             </div>
           </div>
 
-          {/* Navigation Icons */}
-          <div className="flex items-center space-x-6">
-            {/* Home Icon */}
+          {/* CENTER MENU */}
+          <div className="hidden md:flex items-center gap-10 text-sm font-semibold">
+
             <button
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
               onClick={() => navigate("/")}
+              className="text-orange-500"
             >
-              <Home className="h-6 w-6" />
+              HOME
             </button>
 
-            {/* Heart/Wishlist Icon */}
             <button
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200 relative"
-              onClick={() => navigate("/wishlist")}
+              onClick={() => navigate("/about")}
+              className="hover:text-orange-500"
             >
-              <Heart className="h-6 w-6" />
-              {wishlistCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
-                  {wishlistCount}
-                </span>
-              )}
+              ABOUT US
             </button>
 
-            {/* Shopping Cart Icon */}
             <button
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200 relative"
+              onClick={() => navigate("/shop")}
+              className="hover:text-orange-500"
+            >
+              SHOP
+            </button>
+
+            
+            <button
+              onClick={() => navigate("/contact")}
+              className="hover:text-orange-500"
+            >
+              CONTACT
+            </button>
+          </div>
+
+          {/* RIGHT ICONS */}
+          <div className="flex items-center gap-6">
+
+            <button onClick={() => navigate("/search")}>
+              <Search className="w-5 h-5" />
+            </button>
+
+            <button onClick={() => navigate("/profile")}>
+              <User className="w-5 h-5" />
+            </button>
+
+            <button
               onClick={() => navigate("/cart")}
+              className="relative"
             >
-              <ShoppingCart className="h-6 w-6" />
+              <ShoppingCart className="w-5 h-5" />
+
               {getTotalItems() > 0 && (
-                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
+                <span className="absolute -top-2 -right-2 bg-orange-500 text-xs w-4 h-4 flex items-center justify-center rounded-full">
                   {getTotalItems()}
                 </span>
               )}
             </button>
 
-            {/* User Profile Icon */}
+            {/* Mobile Menu */}
             <button
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-              onClick={() => navigate("/profile")}
+              className="md:hidden"
+              onClick={() => setMobileMenu(!mobileMenu)}
             >
-              <User className="h-6 w-6" />
+              {mobileMenu ? <X /> : <Menu />}
             </button>
+
           </div>
         </div>
+
+        {/* MOBILE MENU */}
+        {mobileMenu && (
+          <div className="md:hidden pb-4 flex flex-col gap-4 text-sm font-semibold">
+
+            <button onClick={() => navigate("/")}>HOME</button>
+            <button onClick={() => navigate("/about")}>ABOUT US</button>
+            <button onClick={() => navigate("/shop")}>SHOP</button>
+            <button onClick={() => navigate("/contact")}>CONTACT</button>
+          
+
+          </div>
+        )}
+
       </div>
     </nav>
   );
