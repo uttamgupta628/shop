@@ -7,13 +7,21 @@ import {
   X,
   Grid2x2
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useCart } from "../products/CartContext";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { getTotalItems } = useCart();
   const [mobileMenu, setMobileMenu] = useState(false);
+
+  const isActive = (path: string) =>
+    `text-sm font-semibold tracking-wide ${
+      location.pathname === path
+        ? "text-orange-500"
+        : "hover:text-orange-500"
+    }`;
 
   return (
     <nav className="w-full bg-white/90 text-black relative">
@@ -24,22 +32,22 @@ const Navbar: React.FC = () => {
           {/* CATEGORIES */}
           <div className="relative group">
 
-            <div className="flex items-center   hover:text-orange-500 gap-3 cursor-pointer">
+            <div className="flex items-center hover:text-orange-500 gap-3 cursor-pointer">
               <Grid2x2 className="w-5 h-5" />
               <span className="text-sm font-semibold tracking-wide">
                 CATEGORIES
               </span>
             </div>
 
-            {/* Dropdown Card */}
+            {/* Dropdown */}
             <div className="absolute left-0 top-full w-72 bg-gray-100 text-black shadow-2xl 
-            p-8 space-y-8 opacity-0 invisible 
+            p-8 space-y-6 opacity-0 invisible 
             group-hover:opacity-100 group-hover:visible 
             transition-all duration-300 z-50">
 
               <button
                 onClick={() => navigate("/tshirts")}
-                className="block font-semibold hover:text-orange-500" 
+                className="block font-semibold hover:text-orange-500"
               >
                 T-SHIRTS
               </button>
@@ -83,36 +91,36 @@ const Navbar: React.FC = () => {
           </div>
 
           {/* CENTER MENU */}
-          <div className="hidden md:flex items-center gap-10 text-sm font-semibold">
+          <div className="hidden md:flex items-center gap-10">
 
             <button
               onClick={() => navigate("/")}
-              className="text-orange-500"
+              className={isActive("/")}
             >
               HOME
             </button>
 
             <button
               onClick={() => navigate("/about")}
-              className="hover:text-orange-500"
+              className={isActive("/about")}
             >
               ABOUT US
             </button>
 
             <button
               onClick={() => navigate("/shop")}
-              className="hover:text-orange-500"
+              className={isActive("/shop")}
             >
               SHOP
             </button>
 
-            
             <button
               onClick={() => navigate("/contact")}
-              className="hover:text-orange-500"
+              className={isActive("/contact")}
             >
               CONTACT
             </button>
+
           </div>
 
           {/* RIGHT ICONS */}
@@ -139,7 +147,7 @@ const Navbar: React.FC = () => {
               )}
             </button>
 
-            {/* Mobile Menu */}
+            {/* MOBILE MENU */}
             <button
               className="md:hidden"
               onClick={() => setMobileMenu(!mobileMenu)}
@@ -154,11 +162,33 @@ const Navbar: React.FC = () => {
         {mobileMenu && (
           <div className="md:hidden pb-4 flex flex-col gap-4 text-sm font-semibold">
 
-            <button onClick={() => navigate("/")}>HOME</button>
-            <button onClick={() => navigate("/about")}>ABOUT US</button>
-            <button onClick={() => navigate("/shop")}>SHOP</button>
-            <button onClick={() => navigate("/contact")}>CONTACT</button>
-          
+            <button
+              onClick={() => navigate("/")}
+              className={isActive("/")}
+            >
+              HOME
+            </button>
+
+            <button
+              onClick={() => navigate("/about")}
+              className={isActive("/about")}
+            >
+              ABOUT US
+            </button>
+
+            <button
+              onClick={() => navigate("/shop")}
+              className={isActive("/shop")}
+            >
+              SHOP
+            </button>
+
+            <button
+              onClick={() => navigate("/contact")}
+              className={isActive("/contact")}
+            >
+              CONTACT
+            </button>
 
           </div>
         )}
