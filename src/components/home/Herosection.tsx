@@ -118,7 +118,7 @@ export default function HeroSection() {
 
               <p className="text-gray-700 max-w-md">{slide.body}</p>
 
-              <button className="bg-black text-white px-8 py-3 rounded-full font-semibold hover:shadow-xl">
+              <button className="bg-black text-white px-8 py-3 rounded-2xl font-semibold hover:shadow-xl">
                 Shop Now
               </button>
 
@@ -158,7 +158,7 @@ export default function HeroSection() {
       </div>
 
       {/* CATEGORY STRIP */}
-      <div className="bg-white border-y-2 border-gray-900">
+      <div className="bg-white border-y-1 border-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16">
           <div className="flex h-[130px] sm:h-[160px] lg:h-[200px]">
             {categories.map((cat: Category) => (
@@ -176,7 +176,7 @@ export default function HeroSection() {
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-500" />
 
                 {/* red top accent line */}
-                <div className="absolute top-0 left-0 right-0 h-[3px] bg-transparent group-hover:bg-[#e63946] transition-all duration-500" />
+                <div className="absolute top-0 left-0 right-0 h-[3px] bg-transparent group-hover:bg-orange-500 transition-all duration-500" />
 
                 {/* content */}
                 <div className="relative z-10 h-full flex flex-col items-center justify-end pb-4 px-2 gap-1">
@@ -201,8 +201,8 @@ export default function HeroSection() {
             ))}
           </div>
         </div>
-
-        {/* MARQUEE */}
+      </div>
+ {/* MARQUEE */}
         <div className="overflow-hidden border-t border-gray-100 py-2 bg-white">
           <div className="flex gap-10 w-max animate-marquee">
             {[...Array(2)].map((_: undefined, i: number) =>
@@ -215,8 +215,6 @@ export default function HeroSection() {
             )}
           </div>
         </div>
-      </div>
-
       <style>{`
         @keyframes marquee {
           from { transform: translateX(0); }
