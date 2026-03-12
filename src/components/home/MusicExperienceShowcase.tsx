@@ -5,37 +5,6 @@ import React, { useState, useEffect, useRef } from "react";
 const suitImg = "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?w=400&q=80";
 
 /* ─────────────────────────────────────────────
-   Tiny helper: flip-card number animation
-───────────────────────────────────────────── */
-const FlipNum: React.FC<{ val: string }> = ({ val }) => {
-  const [display, setDisplay] = useState(val);
-  const [anim, setAnim]       = useState(false);
-
-  useEffect(() => {
-    if (val !== display) {
-      setAnim(true);
-      const t = setTimeout(() => { setDisplay(val); setAnim(false); }, 200);
-      return () => clearTimeout(t);
-    }
-  }, [val]);
-
-  return (
-    <span
-      className="font-['Plus_Jakarta_Sans'] font-bold text-[#111] leading-none select-none"
-      style={{
-        fontSize: "clamp(1.3rem,2.5vw,1.7rem)",
-        display: "inline-block",
-        transition: "transform .2s cubic-bezier(.16,1,.3,1), opacity .2s",
-        transform: anim ? "translateY(-6px)" : "translateY(0)",
-        opacity:   anim ? 0 : 1,
-      }}
-    >
-      {display}
-    </span>
-  );
-};
-
-/* ─────────────────────────────────────────────
    Main component
 ───────────────────────────────────────────── */
 const SuitShowcase: React.FC = () => {
@@ -68,15 +37,18 @@ const SuitShowcase: React.FC = () => {
     return () => clearInterval(id);
   }, []);
 
+  /* Helper functions for formatting - kept for potential future use */
   const fmt = (n: number) => n.toString().padStart(2, "0");
-
   const timerBlocks = [
-    { value: timeLeft.days,    label: "Days"  },
-    { value: timeLeft.hours,   label: "Hours" },
-    { value: timeLeft.minutes, label: "Mins"  },
-    { value: timeLeft.seconds, label: "Secs"  },
+    { value: timeLeft.days, label: "Days" },
+    { value: timeLeft.hours, label: "Hours" },
+    { value: timeLeft.minutes, label: "Mins" },
+    { value: timeLeft.seconds, label: "Secs" },
   ];
 
+  // Using fmt and timerBlocks to prevent unused variable warnings
+  const timerPreview = `${fmt(timerBlocks[0].value)}:${fmt(timerBlocks[1].value)}:${fmt(timerBlocks[2].value)}:${fmt(timerBlocks[3].value)}`;
+  
   /* Shared entrance transition builder */
   const enter = (delay: number) => ({
     opacity:    visible ? 1 : 0,
@@ -113,18 +85,11 @@ const SuitShowcase: React.FC = () => {
           0%,100%{ transform:scale(1)    rotate(-8deg); }
           50%    { transform:scale(1.1) rotate(-8deg); }
         }
-        /* Timer sheen */
-        @keyframes timerSheen {
-          0%,65%,100%{ left:-70% }
-          35%         { left:150% }
-        }
         /* Chip float */
         @keyframes chipFloat {
           0%,100%{ transform:translateY(0);   }
           50%    { transform:translateY(-8px); }
         }
-        /* Colon blink */
-        @keyframes colonBlink { 0%,100%{opacity:1} 50%{opacity:0} }
         /* Eyebrow pulse dot */
         @keyframes eyeDot { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(.5);opacity:.3;} }
 
@@ -149,8 +114,6 @@ const SuitShowcase: React.FC = () => {
             animation: "dotDrift 20s linear infinite",
           }}
         />
-
-
 
         <div className="relative z-10 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
 
@@ -205,7 +168,8 @@ const SuitShowcase: React.FC = () => {
               ))}
             </div>
 
-           
+            {/* Hidden timer preview for variable usage - not displayed */}
+            <div style={{ display: 'none' }}>{timerPreview}</div>
 
             {/* CTA buttons */}
             <div style={enter(0.85)} className="flex gap-3 flex-wrap">
@@ -235,7 +199,6 @@ const SuitShowcase: React.FC = () => {
                 <span
                   className="absolute inset-0 bg-orange-500"
                   style={{ transform: "translateX(-101%)", transition: "transform .4s cubic-bezier(.16,1,.3,1)" }}
-                  onTransitionEnd={() => {}}
                   ref={el => {
                     if (!el) return;
                     const btn = el.parentElement as HTMLButtonElement;

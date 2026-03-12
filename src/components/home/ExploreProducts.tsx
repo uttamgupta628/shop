@@ -31,7 +31,7 @@ const ExploreProducts: React.FC = () => {
 
   const [visible,  setVisible]  = useState(false);
   const [page,     setPage]     = useState(0);
-  const [hoveredI, setHoveredI] = useState<number | null>(null);
+  const [_hoveredI, setHoveredI] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
   const totalPages = Math.ceil(CATEGORIES.length / COLS_PER_PAGE);
