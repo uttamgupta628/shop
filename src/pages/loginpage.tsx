@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import {
   Eye, EyeOff, Mail, Lock, ArrowRight,
@@ -39,7 +39,6 @@ export default function LoginPage() {
   const [error,    setError]    = useState("");
   const [loading,  setLoading]  = useState(false);
   const [visible,  setVisible]  = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 60);
@@ -103,8 +102,6 @@ export default function LoginPage() {
             animation: "dotDrift 18s linear infinite",
           }}
         />
-
-       
 
         {/* Floating particles */}
         {[

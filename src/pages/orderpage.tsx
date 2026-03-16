@@ -133,26 +133,15 @@ const STATUS_CONFIG: Record<OrderStatus, { label: string; color: string; bg: str
    Tabs config
 ───────────────────────────────────────────── */
 const TABS: { key: Tab; label: string; icon: React.ReactNode }[] = [
-  { key: "orders",        label: "My Orders",       icon: <Package size={15} /> },
-  { key: "returns",       label: "My Returns",      icon: <RotateCcw size={15} /> },
-  { key: "cancellations", label: "My Cancellations",icon: <XCircle size={15} /> },
+  { key: "orders",        label: "My Orders",        icon: <Package size={15} /> },
+  { key: "returns",       label: "My Returns",       icon: <RotateCcw size={15} /> },
+  { key: "cancellations", label: "My Cancellations", icon: <XCircle size={15} /> },
 ];
-
-/* ─────────────────────────────────────────────
-   Stars
-───────────────────────────────────────────── */
-const Stars = ({ n }: { n: number }) => (
-  <div className="flex gap-0.5">
-    {[1,2,3,4,5].map(s => (
-      <Star key={s} size={12} fill={s <= n ? "#f97316" : "none"} stroke={s <= n ? "#f97316" : "#d1d5db"} />
-    ))}
-  </div>
-);
 
 /* ─────────────────────────────────────────────
    Order Card
 ───────────────────────────────────────────── */
-function OrderCard({ order, onRate }: { order: Order; onRate?: (id: string) => void }) {
+function OrderCard({ order }: { order: Order }) {
   const [expanded, setExpanded] = useState(false);
   const [rated, setRated]       = useState(0);
   const cfg = STATUS_CONFIG[order.status];
@@ -171,7 +160,6 @@ function OrderCard({ order, onRate }: { order: Order; onRate?: (id: string) => v
           <span className="text-[10px] text-gray-400">·</span>
           <span className="text-[10px] text-gray-400">{order.date}</span>
         </div>
-        {/* Status pill */}
         <span
           className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full"
           style={{ color: cfg.color, background: cfg.bg }}
@@ -523,9 +511,9 @@ export default function MyOrdersPage() {
           {/* ── Stats footer ── */}
           <div className="grid grid-cols-3 gap-3 mt-8 pt-6 border-t border-black/6">
             {[
-              { label: "Total Orders",       value: counts.orders,        color: "#f97316", bg: "#fff7f0" },
-              { label: "Returns",            value: counts.returns,       color: "#7c3aed", bg: "#ede9fe" },
-              { label: "Cancellations",      value: counts.cancellations, color: "#dc2626", bg: "#fee2e2" },
+              { label: "Total Orders",  value: counts.orders,        color: "#f97316", bg: "#fff7f0" },
+              { label: "Returns",       value: counts.returns,       color: "#7c3aed", bg: "#ede9fe" },
+              { label: "Cancellations", value: counts.cancellations, color: "#dc2626", bg: "#fee2e2" },
             ].map(stat => (
               <div
                 key={stat.label}
