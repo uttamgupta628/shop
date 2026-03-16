@@ -56,7 +56,7 @@ export default function ContactPage() {
 
               <a
                 href="tel:+919876543210"
-                className="bg-white  p-4 rounded-lg hover:text-orange-500  transition"
+                className="bg-white p-4 rounded-lg hover:text-orange-500 transition"
               >
                 📞 +91 98765 43210
               </a>
@@ -70,14 +70,14 @@ export default function ContactPage() {
 
               <a
                 href="mailto:help@mallkabaap.in"
-                className="bg-white p-4 rounded-lg hover:text-orange-500  transition"
+                className="bg-white p-4 rounded-lg hover:text-orange-500 transition"
               >
                 ✉️ help@mallkabaap.in
               </a>
 
               <a
                 href="#info"
-                className="bg-white  p-4 rounded-lg hover:text-orange-500  transition"
+                className="bg-white p-4 rounded-lg hover:text-orange-500 transition"
               >
                 📍 Lal Bazar, Kolkata
               </a>
@@ -144,9 +144,22 @@ export default function ContactPage() {
           className="grid md:grid-cols-2 mt-16 rounded-xl overflow-hidden"
         >
 
-          <div className="bg-white flex items-center justify-center p-16 text-lg border-r">
-            📍 Lal Bazar, Kolkata — 700001
+          {/* GOOGLE MAP */}
+
+          <div className="w-full h-[400px]">
+
+            <iframe
+              src="https://www.google.com/maps?q=Lal%20Bazar%20Kolkata&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+
           </div>
+
+          {/* BUSINESS HOURS */}
 
           <div className="bg-black text-white p-10">
 
